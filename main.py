@@ -1,6 +1,6 @@
 import datetime
 from utils.simulator import Simulator
-from utils.vix import VixCenter
+from utils.data import DataCenter
 
 
 def main():
@@ -10,14 +10,13 @@ def main():
     interval = 14
     cost = 2000
     simulator.execute_dca('TQQQ', start_date, end_date, interval, cost)
-    simulator.execute_dca('QLD', start_date, end_date, interval, cost)
-    simulator.execute_dca('QQQ', start_date, end_date, interval, cost)
-    simulator.execute_dca('NVDA', start_date, end_date, interval, cost)
-    simulator.execute_dca('AAPL', start_date, end_date, interval, cost)
-    simulator.execute_dca('MSFT', start_date, end_date, interval, cost)
-    simulator.execute_dca('GOOGL', start_date, end_date, interval, cost)
-    simulator.execute_dca('AMZN', start_date, end_date, interval, cost)
-    # simulator.execute_vix_rsi()
-
+    # simulator.execute_dca('QLD', start_date, end_date, interval, cost)
+    # simulator.execute_dca('QQQ', start_date, end_date, interval, cost)
+    # simulator.execute_dca('NVDA', start_date, end_date, interval, cost)
+    # simulator.execute_dca('AAPL', start_date, end_date, interval, cost)
+    # simulator.execute_dca('MSFT', start_date, end_date, interval, cost)
+    # simulator.execute_dca('GOOGL', start_date, end_date, interval, cost)
+    # simulator.execute_dca('AMZN', start_date, end_date, interval, cost)
+    
 if __name__ == "__main__":
     main()

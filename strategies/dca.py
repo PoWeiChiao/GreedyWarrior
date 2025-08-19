@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta
 from utils.profolio import Profolio
-from utils.stock import StockCenter
+from utils.data import DataCenter
 
 class DCA:
     def __init__(self, profolio: Profolio):
         self.profolio = profolio
-        self.stockCenter = StockCenter()
+        self.dataCenter = DataCenter()
 
     def execute(self, code: str, start_date: datetime, end_date: datetime, interval: int = 30, cost: float = 3000, show_result: bool = False) -> None:
         """
@@ -29,29 +29,29 @@ class DCA:
         final_return_rate = 0.0
         while current_date <= end_date:
             # Find the next valid trading day on or after current_date
-            while current_date <= end_date and not self.stockCenter.is_valid_date(code, current_date.strftime('%Y-%m-%d')):
+            while current_date <= end_date and not self.dataCenter.is_valid_date(code, current_date.strftime('%Y-%m-%d')):
                 current_date += timedelta(days=1)
             if current_date > end_date:
                 break
 
-            stock_info = self.stockCenter.get_stock_info(code, current_date.strftime('%Y-%m-%d'))
+            data_info = self.dataCenter.get_data_info(code, current_date.strftime('%Y-%m-%d'))
             # Ensure enough cash is available
             if self.profolio.get_cash() < cost:
                 self.profolio.add_cash(cost)
-            shares_to_buy = int(cost // stock_info.close)
+            shares_to_buy = int(cost // data_info.close)
             if shares_to_buy == 0:
                 if show_result:
-                    print(f"[{current_date.strftime('%Y-%m-%d')}] Not enough cash to buy at least one share at price {stock_info.close:.2f}")
+                    print(f"[{current_date.strftime('%Y-%m-%d')}] Not enough cash to buy at least one share at price {data_info.close:.2f}")
                 current_date += timedelta(days=interval)
                 continue
-            self.profolio.buy_stock(code, cost, stock_info.close)
+            self.profolio.buy_stock(code, cost, data_info.close)
             # Calculate return after buying
             return_rate = self.get_return(code, current_date) * 100
             if show_result:
-                print(f"[{current_date.strftime('%Y-%m-%d')}] Bought {shares_to_buy} shares at {stock_info.close:.2f} per share.")
+                print(f"[{current_date.strftime('%Y-%m-%d')}] Bought {shares_to_buy} shares at {data_info.close:.2f} per share.")
                 print(f"[{current_date.strftime('%Y-%m-%d')}] Holding {self.profolio.get_holding_shares(code)} shares at average price {self.profolio.get_holding_average_price(code):.2f}.")
-                print(f"Average price {self.profolio.get_holding_average_price(code):.2f} Current price: {stock_info.close:.2f} Return: {return_rate:.2f}%")
-            final_price = stock_info.close
+                print(f"Average price {self.profolio.get_holding_average_price(code):.2f} Current price: {data_info.close:.2f} Return: {return_rate:.2f}%")
+            final_price = data_info.close
             final_return_rate = return_rate
             current_date += timedelta(days=interval)
         print("="*60)
@@ -73,10 +73,10 @@ class DCA:
         Return is (current_value + cash - total_invested) / total_invested.
         """
         # Get current price
-        if not self.stockCenter.is_valid_date(code, current_date.strftime('%Y-%m-%d')):
+        if not self.dataCenter.is_valid_date(code, current_date.strftime('%Y-%m-%d')):
             raise ValueError("Invalid date for the given stock code.")
-        stock_info = self.stockCenter.get_stock_info(code, current_date.strftime('%Y-%m-%d'))
-        current_price = stock_info.close
+        data_info = self.dataCenter.get_data_info(code, current_date.strftime('%Y-%m-%d'))
+        current_price = data_info.close
 
         # Get holding value and cash
         holding_shares = self.profolio.get_holding_shares(code)
