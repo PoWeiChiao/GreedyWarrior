@@ -34,3 +34,16 @@ class Simulator:
             sp500_rsi2_threshold=sp500_rsi2_threshold,
             sp500_sma200=sp500_sma200
         )
+    
+    def execute_sell_high(self, start_date: str, end_date: str, vix_threshold: float = 20, vix_rsi2_threshold: float = 10, sp500_rsi2_threshold: float = 65, sp500_sma200: bool = True):
+        """ Executes a Sell High strategy. """
+        print("Executing Sell High strategy...")
+        buy_dip = BuyDip(self.profolio)
+        buy_dip.get_high(
+            start_date=start_date,
+            end_date=end_date,
+            vix_threshold=vix_threshold,
+            vix_rsi2_threshold=vix_rsi2_threshold,
+            sp500_rsi2_threshold=sp500_rsi2_threshold,
+            sp500_sma200=sp500_sma200
+        )

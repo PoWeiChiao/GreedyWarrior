@@ -10,14 +10,21 @@ def main():
     # interval = 14
     # cost = 2000
     # simulator.execute_dca('TQQQ', start_date, end_date, interval, cost)
-    simulator.execute_buy_dip(
+    # simulator.execute_buy_dip(
+    #     start_date='2022-01-01',
+    #     end_date='2025-08-13',
+    #     vix_threshold=30,
+    #     vix_rsi2_threshold=90,
+    #     sp500_rsi2_threshold=30,
+    #     sp500_sma200=True
+    # )
+    simulator.execute_sell_high(
         start_date='2022-01-01',
         end_date='2025-08-13',
-        vix_threshold=30,
-        vix_rsi2_threshold=90,
-        sp500_rsi2_threshold=30,
-        sp500_sma200=True
-    )
+        vix_threshold=20,
+        vix_rsi2_threshold=10,
+        sp500_rsi2_threshold=65,
+        sp500_sma200=True)
     # simulator.execute_dca('QLD', start_date, end_date, interval, cost)
     # simulator.execute_dca('QQQ', start_date, end_date, interval, cost)
     # simulator.execute_dca('NVDA', start_date, end_date, interval, cost)
