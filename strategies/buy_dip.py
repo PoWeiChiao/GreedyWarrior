@@ -1,15 +1,13 @@
 from utils.profolio import Profolio
-from utils.data import StockCenter
-from utils.vix import VixCenter
+from utils.data import DataCenter
 
 
 class BuyDip:
     def __init__(self, profolio: Profolio):
         self.profolio = profolio
-        self.vix_center = VixCenter()
-        self.stock_center = StockCenter()
+        self.data_center = DataCenter()
 
-    def get_dip(self, start_date: str, end_date: str, rsi2_threshold: float = 90) -> None:
+    def get_dip(self, start_date: str, end_date: str, vix_rsi2_threshold: float = 90, sp500_rsi2_threshold: float = 30, sp500_sma200: bool = True) -> None:
         """
         Executes a Buy Dip strategy:
         - Buys when RSI2 is above the threshold.
@@ -17,15 +15,21 @@ class BuyDip:
         """
         print("="*60)
         print(f"Buy Dip Execution from {start_date} to {end_date}")
-        print(f"RSI2 Threshold: {rsi2_threshold}")
+        print(f"VIX RSI2 Threshold: {vix_rsi2_threshold}")
+        print(f"S&P 500 RSI2 Threshold: {sp500_rsi2_threshold}")
+        print(f"S&P 500 SMA200: {'Enabled' if sp500_sma200 else 'Disabled'}")
         print("="*60)
 
-        for date, vix_info in self.vix_center.vix_data.items():
-            if date < start_date or date > end_date:
-                continue
+        sp500 = self.data_center.data_info.get('SP500', {})
+        vix = self.data_center.data_info.get('VIX', {})
 
-            if vix_info.rsi2 >= rsi2_threshold:
-                print(f"[{date}] (VIX: {vix_info.high:.2f}) (RSI2: {vix_info.rsi2:.2f}) (RSI14: {vix_info.rsi14:.2f})")
+        for date in vix:
+            if date < start_date or date > end_date:
+                continue    
+            if date not in sp500:
+                continue
+            if vix[date].rsi2>= vix_rsi2_threshold and sp500[date].rsi2 <= sp500_rsi2_threshold and sp500[date].sma_200 < sp500[date].close:
+                print(f"[{date}] (VIX: {vix[date].high:.2f}) (VIX RSI2: {vix[date].rsi2:.2f}) (SP500 RSI2: {sp500[date].rsi2:.2f}) (SP500 SMA200: {sp500[date].sma_200:.2f})")
 
     def execute(self, code: str, start_date: str, end_date: str, rsi2_threshold: float = 90) -> None:
         return
