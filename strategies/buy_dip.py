@@ -7,7 +7,7 @@ class BuyDip:
         self.profolio = profolio
         self.data_center = DataCenter()
 
-    def get_dip(self, start_date: str, end_date: str, vix_rsi2_threshold: float = 90, sp500_rsi2_threshold: float = 30, sp500_sma200: bool = True) -> None:
+    def get_dip(self, start_date: str, end_date: str, vix_threshold: float = 30, vix_rsi2_threshold: float = 90, sp500_rsi2_threshold: float = 30, sp500_sma200: bool = True) -> None:
         """
         Executes a Buy Dip strategy:
         - Buys when RSI2 is above the threshold.
@@ -15,6 +15,7 @@ class BuyDip:
         """
         print("="*60)
         print(f"Buy Dip Execution from {start_date} to {end_date}")
+        print(f"VIX Threshold: {vix_threshold}")
         print(f"VIX RSI2 Threshold: {vix_rsi2_threshold}")
         print(f"S&P 500 RSI2 Threshold: {sp500_rsi2_threshold}")
         print(f"S&P 500 SMA200: {'Enabled' if sp500_sma200 else 'Disabled'}")
@@ -28,8 +29,8 @@ class BuyDip:
                 continue    
             if date not in sp500:
                 continue
-            if vix[date].rsi2>= vix_rsi2_threshold and sp500[date].rsi2 <= sp500_rsi2_threshold and sp500[date].sma_200 < sp500[date].close:
-                print(f"[{date}] (VIX: {vix[date].high:.2f}) (VIX RSI2: {vix[date].rsi2:.2f}) (SP500 RSI2: {sp500[date].rsi2:.2f}) (SP500 SMA200: {sp500[date].sma_200:.2f})")
+            if vix[date].high >= vix_threshold:
+                print(f"[{date}] (VIX: {vix[date].high:.2f}) (VIX RSI2: {vix[date].rsi2:.2f}) (SP500 RSI2: {sp500[date].rsi2:.2f}) (SP500: {sp500[date].close:.2f}) (SP500 SMA200: {sp500[date].sma_200:.2f})")
 
     def execute(self, code: str, start_date: str, end_date: str, rsi2_threshold: float = 90) -> None:
         return

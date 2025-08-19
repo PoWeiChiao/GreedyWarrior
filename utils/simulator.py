@@ -22,13 +22,14 @@ class Simulator:
             cost=cost
         )
 
-    def execute_buy_dip(self, start_date: str, end_date: str, vix_rsi2_threshold: float = 90, sp500_rsi2_threshold: float = 30, sp500_sma200: bool = True):
+    def execute_buy_dip(self, start_date: str, end_date: str, vix_threshold:float = 30, vix_rsi2_threshold: float = 90, sp500_rsi2_threshold: float = 30, sp500_sma200: bool = True):
         """ Executes a Buy Dip strategy. """
         print("Executing Buy Dip strategy...")
         buy_dip = BuyDip(self.profolio)
         buy_dip.get_dip(
             start_date=start_date,
             end_date=end_date,
+            vix_threshold=vix_threshold,
             vix_rsi2_threshold=vix_rsi2_threshold,
             sp500_rsi2_threshold=sp500_rsi2_threshold,
             sp500_sma200=sp500_sma200

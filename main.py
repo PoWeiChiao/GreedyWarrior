@@ -11,9 +11,10 @@ def main():
     # cost = 2000
     # simulator.execute_dca('TQQQ', start_date, end_date, interval, cost)
     simulator.execute_buy_dip(
-        start_date='2023-01-01',
+        start_date='2022-01-01',
         end_date='2025-08-13',
-        vix_rsi2_threshold=80,
+        vix_threshold=30,
+        vix_rsi2_threshold=90,
         sp500_rsi2_threshold=30,
         sp500_sma200=True
     )
