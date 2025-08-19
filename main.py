@@ -5,7 +5,7 @@ from utils.vix import VixCenter
 
 def main():
     simulator = Simulator()
-    start_date = datetime.datetime(2022, 1, 1)
+    start_date = datetime.datetime(2023, 1, 1)
     end_date = datetime.datetime(2025, 8, 13)
     interval = 14
     cost = 2000
