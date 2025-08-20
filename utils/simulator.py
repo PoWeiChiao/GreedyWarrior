@@ -1,5 +1,5 @@
 from datetime import datetime
-from strategies.buy_dip import BuyDip
+from helper.dipFinder import DipFinder
 from strategies.dca import DCA
 from utils.profolio import Profolio
 from utils.data import DataCenter
@@ -22,28 +22,9 @@ class Simulator:
             cost=cost
         )
 
-    def execute_buy_dip(self, start_date: str, end_date: str, vix_threshold:float = 30, vix_rsi2_threshold: float = 90, sp500_rsi2_threshold: float = 30, sp500_sma200: bool = True):
+    def execute_buy_dip(self, start_date: datetime = datetime(2025, 1, 1), end_date: datetime = datetime(2025, 8, 13), vix_threshold: float = 40.0, vix_rsi2_threshold: float = 90.0, sp500_rsi2_threshold: float = 30.0, sp500_sma200: bool = True):
         """ Executes a Buy Dip strategy. """
         print("Executing Buy Dip strategy...")
-        buy_dip = BuyDip(self.profolio)
-        buy_dip.get_dip(
-            start_date=start_date,
-            end_date=end_date,
-            vix_threshold=vix_threshold,
-            vix_rsi2_threshold=vix_rsi2_threshold,
-            sp500_rsi2_threshold=sp500_rsi2_threshold,
-            sp500_sma200=sp500_sma200
-        )
-    
-    def execute_sell_high(self, start_date: str, end_date: str, vix_threshold: float = 20, vix_rsi2_threshold: float = 10, sp500_rsi2_threshold: float = 65, sp500_sma200: bool = True):
-        """ Executes a Sell High strategy. """
-        print("Executing Sell High strategy...")
-        buy_dip = BuyDip(self.profolio)
-        buy_dip.get_high(
-            start_date=start_date,
-            end_date=end_date,
-            vix_threshold=vix_threshold,
-            vix_rsi2_threshold=vix_rsi2_threshold,
-            sp500_rsi2_threshold=sp500_rsi2_threshold,
-            sp500_sma200=sp500_sma200
-        )
+        dip_finder = DipFinder(vix_threshold=vix_threshold, vix_rsi2_threshold=vix_rsi2_threshold, sp500_rsi2_threshold=sp500_rsi2_threshold, sp500_sma200=sp500_sma200)
+        dips = dip_finder.find_dips(start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d'))
+        
